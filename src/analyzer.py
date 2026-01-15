@@ -72,7 +72,7 @@ class Analyzer:
         try:
             Config.validate()
             genai.configure(api_key=Config.GEMINI_API_KEY)
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-2.0-flash')
             
             logger.info("calling_gemini_api", text_length=len(text))
             start_api = time.time()

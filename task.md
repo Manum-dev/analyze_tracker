@@ -7,7 +7,7 @@
 - [x] Fix the issue
     - [ ] Install missing dependencies if needed
     - [ ] Update documentation if needed
-- [ ] Implement DB Storage
+- [x] Implement DB Storage
     - [x] Create DB module (JSON file)
     - [x] Update `analyzer.py` or `main.py` to save results
     - [x] Update `main.py` to reflect text input clearly

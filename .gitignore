@@ -210,3 +210,5 @@ __marimo__/
 *.json
 run_log*
 .agent/rules
+task*.md
+TASKS.md

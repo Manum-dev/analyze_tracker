@@ -24,5 +24,53 @@
             "keywords": [],
             "latency_ms": 0.0
         }
+    },
+    {
+        "id": 3,
+        "timestamp": "2026-01-15T18:15:18.901243",
+        "source": "text_input",
+        "metrics": {
+            "word_count": 13,
+            "char_count": 80,
+            "sentence_count": 2,
+            "sentiment_score": null,
+            "sentiment_label": null,
+            "sentiment_confidence": null,
+            "summary": null,
+            "keywords": [],
+            "latency_ms": 0.0
+        }
+    },
+    {
+        "id": 4,
+        "timestamp": "2026-01-15T18:16:55.688278",
+        "source": "text_input",
+        "metrics": {
+            "word_count": 4,
+            "char_count": 26,
+            "sentence_count": 1,
+            "sentiment_score": null,
+            "sentiment_label": null,
+            "sentiment_confidence": null,
+            "summary": null,
+            "keywords": [],
+            "latency_ms": 0.0
+        }
+    },
+    {
+        "id": 5,
+        "timestamp": "2026-01-15T18:19:15.766512",
+        "source": "Analisi input diretto",
+        "metrics": {
+            "word_count": 3,
+            "char_count": 21,
+            "sentence_count": 1,
+            "sentiment_score": null,
+            "sentiment_label": null,
+            "sentiment_confidence": null,
+            "summary": null,
+            "keywords": [],
+            "latency_ms": 0.0
+        }
     }
 ]

@@ -43,7 +43,7 @@ def analyze(
         raise typer.Exit(code=1)
 
     input_data = text
-    source = "text_input"
+    source = text
 
     # Handle file input
     if file:
@@ -67,19 +67,28 @@ def analyze(
         logger.info("analysis_success", source=source, result=result)
         
         # 4. Display Output
-        typer.echo("-" * 20)
+        typer.echo("=" * 40)
+        typer.echo(f"  ANALYZE TRACKER REPORT")
+        typer.echo("=" * 40)
         typer.echo(f"Source: {source}")
-        typer.echo(f"metrics: {result.word_count} words, {result.sentence_count} sentences")
         
-        if result.sentiment_score is not None:
-             # rich formatting could be nice here, but keeping it simple for now
-            mood = "Neutral"
-            if result.sentiment_score > 0.1: mood = "Positive"
-            if result.sentiment_score < -0.1: mood = "Negative"
-            typer.echo(f"Sentiment: {result.sentiment_score} ({mood})")
-            typer.echo(f"Keywords: {', '.join(result.keywords)}")
-        else:
-            typer.echo("Sentiment: N/A (API Analysis Skipped or Failed)")
+        # Summary Section
+        if result.summary:
+            typer.echo(f"\n[SUMMARY]\n{result.summary}")
+            
+        # Metrics Section
+        typer.echo(f"\n[METRICS]\nWords: {result.word_count} | Sentences: {result.sentence_count} | Chars: {result.char_count}")
+
+        # Sentiment Section
+        if result.sentiment_label:
+            typer.echo(f"\n[SENTIMENT]\n{result.sentiment_label.upper()} (Confidence: {result.sentiment_confidence})")
+        
+        # Keywords Section
+        if result.keywords:
+           typer.echo(f"\n[KEYWORDS]\n{', '.join(result.keywords)}")
+           
+        if not result.sentiment_label and not result.summary:
+             typer.echo("\n(Note: Full AI analysis data missing or failed)")
             
         # 4. Save to DB
         try:

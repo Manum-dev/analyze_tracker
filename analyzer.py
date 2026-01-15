@@ -2,10 +2,10 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
 import time
-from .cleanliness import Observability
 
+from cleanliness import Observability
 import google.generativeai as genai
-from .config import Config
+from config import Config
 
 # Initialize logger
 logger = Observability().get_logger("analyzer")

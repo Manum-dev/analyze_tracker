@@ -1,8 +1,8 @@
 
 import unittest
 from unittest.mock import patch, MagicMock
-from src.analyzer import Analyzer, AnalyzeResult
-from src.config import Config
+from analyzer import Analyzer, AnalyzeResult
+from config import Config
 
 class TestAnalyzer(unittest.TestCase):
     
@@ -10,14 +10,14 @@ class TestAnalyzer(unittest.TestCase):
         self.analyzer = Analyzer()
         # Mock the valid config validation to avoid environment error during tests
         # We patch where it is defined because it is imported inside the method
-        self.config_patcher = patch('src.config.Config.validate')
+        self.config_patcher = patch('config.Config.validate')
         self.mock_validate = self.config_patcher.start()
         Config.GEMINI_API_KEY = "test_key" # Dummy key
 
     def tearDown(self):
         self.config_patcher.stop()
 
-    @patch('src.analyzer.genai')
+    @patch('analyzer.genai')
     def test_analyze_with_gemini_success(self, mock_genai):
         # Setup mock response
         mock_model = MagicMock()
@@ -50,7 +50,7 @@ class TestAnalyzer(unittest.TestCase):
         mock_genai.configure.assert_called_with(api_key="test_key")
         mock_model.generate_content.assert_called_once()
     
-    @patch('src.analyzer.genai')
+    @patch('analyzer.genai')
     def test_analyze_with_gemini_failure(self, mock_genai):
         # Simulate an API error (e.g. 429 or network)
         mock_genai.GenerativeModel.side_effect = Exception("API Quota Exceeded")

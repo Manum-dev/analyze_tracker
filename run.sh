@@ -13,4 +13,4 @@ else
 fi
 
 # Run the module
-exec $PYTHON_EXEC -m src.main "$@"
+exec $PYTHON_EXEC -m main "$@"

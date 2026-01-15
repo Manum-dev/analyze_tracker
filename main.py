@@ -1,9 +1,14 @@
 
 import typer
 import sys
+import os
+
+# Ensure project root is in sys.path to allow running directly
+
+
 from typing import Optional
-from src.cleanliness import Observability
-from src.analyzer import Analyzer
+from cleanliness import Observability
+from analyzer import Analyzer
 
 app = typer.Typer(help="Analyze Tracker - AI powered text analysis")
 

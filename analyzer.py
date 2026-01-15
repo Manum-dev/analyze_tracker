@@ -20,6 +20,9 @@ class AnalyzeResult:
     char_count: int
     sentence_count: int
     sentiment_score: Optional[float] = None
+    sentiment_label: Optional[str] = None
+    sentiment_confidence: Optional[float] = None
+    summary: Optional[str] = None
     keywords: List[str] = field(default_factory=list)
     latency_ms: float = 0.0
 
@@ -80,13 +83,27 @@ class Analyzer:
             # Antirez style: We want a structured response. 
             # Prompt engineering is critical here.
             prompt = f"""
-            Analyze the following text and return a JSON object with:
-            - sentiment_score: float between -1.0 (negative) and 1.0 (positive)
-            - keywords: list of 3-5 main topics/keywords
+            Analisi tramite Gemini API per il seguente testo:
             
-            Text: "{text[:2000]}" 
+            1. Sentiment analysis con classificazione (positivo/negativo/neutro) e confidence score (0-1)
+            2. Conteggio parole, frasi, caratteri
+            3. Estrazione top 5-10 keywords/temi principali
+            4. Riassunto breve del contenuto (max 100 parole)
+            
+            Restituisci un oggetto JSON puro con questa struttura esatta:
+            {{
+                "sentiment_label": "positivo" | "negativo" | "neutro",
+                "sentiment_confidence": float (0.0 - 1.0),
+                "word_count": int,
+                "sentence_count": int,
+                "char_count": int,
+                "keywords": [list of strings],
+                "summary": "string"
+            }}
+            
+            Text: "{text[:4000]}" 
             """
-            # truncated to 2000 chars for MVP safety
+            # truncated to 4000 chars 
             
             response = model.generate_content(prompt)
             latency = (time.time() - start_api) * 1000
@@ -100,13 +117,28 @@ class Analyzer:
             clean_text = re.sub(r'```json\n|```', '', response.text).strip()
             data = json.loads(clean_text)
             
-            result.sentiment_score = data.get('sentiment_score')
+            # Map Gemini results to AnalyzeResult
+            # Note: We rely on AI for metrics now if successful, or we could overwrite/compare with local
+            # For this request, we'll assign what we got.
+            
+            result.sentiment_label = data.get('sentiment_label')
+            result.sentiment_confidence = data.get('sentiment_confidence')
+            result.summary = data.get('summary')
             result.keywords = data.get('keywords', [])
+            
+            # Optional: Use AI counts if reliable, or keep local. 
+            # The user asked for "Conteggio... (AI via prompt)", so we can arguably update them.
+            # But local is faster/safer. Let's trust local for now or partial update? 
+            # Let's fallback to local keys if missing, but update if present to match the prompt request strictly.
+            if 'word_count' in data: result.word_count = data['word_count']
+            if 'sentence_count' in data: result.sentence_count = data['sentence_count']
+            if 'char_count' in data: result.char_count = data['char_count']
+
             result.latency_ms += latency # Add API latency to total
             
             logger.info("gemini_analysis_completed", 
                         latency_ms=latency, 
-                        sentiment=result.sentiment_score)
+                        sentiment=result.sentiment_label)
             
         except Exception as e:
             logger.error("gemini_api_failed", error=str(e))

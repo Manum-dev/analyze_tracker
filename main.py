@@ -67,9 +67,10 @@ def analyze(
         logger.info("analysis_success", source=source, result=result)
         
         # 4. Display Output
-        typer.echo("=" * 40)
+        # 4. Display Output
+        typer.echo("*" * 40)
         typer.echo(f"  ANALYZE TRACKER REPORT")
-        typer.echo("=" * 40)
+        typer.echo("*" * 40)
         typer.echo(f"Source: {source}")
         
         # Summary Section
@@ -99,7 +100,7 @@ def analyze(
             logger.error("db_save_failed_main", error=str(db_err))
             typer.echo(f"\nWarning: Failed to save result to database: {db_err}")
 
-        typer.echo("-" * 20)
+        typer.echo("*" * 20)
 
     except Exception as e:
         logger.error("analysis_failed", error=str(e))

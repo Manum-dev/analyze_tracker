@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Analyze Sample File (Debug)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.main",
+            "args": [
+                "--file",
+                "${workspaceFolder}/data/sample.txt",
+                "--debug"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Analyze Text Input",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.main",
+            "args": [
+                "--text",
+                "Hello world testing",
+                "--debug"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}

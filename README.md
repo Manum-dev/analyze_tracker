@@ -10,8 +10,8 @@
 ### 2.1 Inputs
 - **CLI Arguments**: The tool accepts input via command-line arguments.
 - **Source**:
-    - File path (e.g., `analyze_tracker --file data/sample.txt`)
-    - Direct text input (e.g., `analyze_tracker --text "I love this project"`)
+    - File path (e.g., `./run.sh --file data/sample.txt`)
+    - Direct text input (e.g., `./run.sh --text "I love this project"`)
 
 ### 2.2 Processing
 - **AI Integration**: Uses `google-generativeai` (Gemini Pro model).

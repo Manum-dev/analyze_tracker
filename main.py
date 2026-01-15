@@ -9,6 +9,7 @@ import os
 from typing import Optional
 from cleanliness import Observability
 from analyzer import Analyzer
+from db import Database
 
 app = typer.Typer(help="Analyze Tracker - AI powered text analysis")
 
@@ -19,7 +20,10 @@ def analyze(
     debug: bool = typer.Option(False, "--debug", "-d", help="Enable verbose debug logging")
 ):
     """
-    Analyze text for metrics and sentiment.
+    Analyze text for metrics and sentiment using Gemini API.
+    
+    This command requires a valid GEMINI_API_KEY environment variable.
+    Results will be saved to a local JSON file (analysis_history.json).
     """
     # 1. Initialize Observability infrastructure
     # This ensures that even startup errors are captured if possible (though here we init it first)
@@ -30,9 +34,8 @@ def analyze(
 
     # 2. Input Validation
     if not text and not file:
-        logger.warning("no_input_provided")
-        typer.echo("Please provide either --text or --file")
-        raise typer.Exit(code=1)
+        # Interactive mode as requested
+        text = typer.prompt("Inserisci il testo da analizzare")
     
     if text and file:
         logger.warning("multiple_inputs_provided")
@@ -78,6 +81,15 @@ def analyze(
         else:
             typer.echo("Sentiment: N/A (API Analysis Skipped or Failed)")
             
+        # 4. Save to DB
+        try:
+            db = Database()
+            row_id = db.save_result(source, result)
+            typer.echo(f"\nResult saved to database (ID: {row_id})")
+        except Exception as db_err:
+            logger.error("db_save_failed_main", error=str(db_err))
+            typer.echo(f"\nWarning: Failed to save result to database: {db_err}")
+
         typer.echo("-" * 20)
 
     except Exception as e:
